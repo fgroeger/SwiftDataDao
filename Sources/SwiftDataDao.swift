@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 // TODO: Fix Sendable
-public actor SwiftDataDao<T: PersistentModel & Sendable, Mapper: PersistentModelMapper>: @unchecked Sendable where Mapper.SwiftDataModel == T {
+public actor SwiftDataDao<T: PersistentModel & Sendable, Mapper: PersistentModelMapper>: Sendable where Mapper.SwiftDataModel == T {
     private let modelContext: ModelContext
     private let mapper: Mapper
     
@@ -31,7 +31,7 @@ public actor SwiftDataDao<T: PersistentModel & Sendable, Mapper: PersistentModel
                     named: .NSPersistentStoreRemoteChange
                 ).map({ _ in () }) {
                     do {
-                        try await updateContinuation(continuation)
+                        try updateContinuation(continuation)
                     } catch {
                         // log/ignore the error, or return an AsyncThrowingStream
                     }
@@ -44,7 +44,7 @@ public actor SwiftDataDao<T: PersistentModel & Sendable, Mapper: PersistentModel
             
             Task {
                 do {
-                    try await updateContinuation(continuation)
+                    try updateContinuation(continuation)
                 } catch {
                     // log/ignore the error, or return an AsyncThrowingStream
                 }
